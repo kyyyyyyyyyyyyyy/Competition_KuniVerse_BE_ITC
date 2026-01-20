@@ -63,7 +63,7 @@
                         <x-frontend.badge
                             :url="route('frontend.categories.show', [
                                 encode_id($$module_name_singular->category_id),
-                                $$module_name_singular->category->slug,
+                                optional($$module_name_singular->category)->slug ?? 'uncategorized',
                             ])"
                             :text="$$module_name_singular->category->name"
                         />

@@ -15,6 +15,9 @@
         <link href="{{ asset("img/favicon.png") }}" rel="shortcut icon" />
         <link type="image/ico" href="{{ asset("img/favicon.png") }}" rel="icon" />
 
+        <!-- Google Fonts: Material Symbols Outlined -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}" />
 

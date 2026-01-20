@@ -14,6 +14,8 @@ use App\Livewire\Frontend\Terms;
 use App\Livewire\Frontend\Users\ChangePassword;
 use App\Livewire\Frontend\Users\Profile;
 use App\Livewire\Frontend\Users\ProfileEdit;
+use App\Livewire\Frontend\Artikel\Index as ArtikelIndex;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,6 +45,12 @@ Route::get('dashboard', Home::class)->name('dashboard');
 // pages
 Route::get('terms', Terms::class)->name('terms');
 Route::get('privacy', Privacy::class)->name('privacy');
+
+// Menu Routes
+Route::get('wisata', Home::class)->name('wisata');
+Route::get('kuliner', Home::class)->name('kuliner');
+Route::get('umkm', Home::class)->name('umkm');
+Route::get('artikel', ArtikelIndex::class)->name('artikel');
 
 Route::group(['as' => 'frontend.'], function () {
     Route::get('/', Home::class)->name('index');

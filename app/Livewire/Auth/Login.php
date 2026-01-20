@@ -15,7 +15,7 @@ use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 #[Title('Login')]
-#[Layout('components.layouts.auth')]
+#[Layout('components.layouts.auth.kuniverse')]
 class Login extends Component
 {
     #[Validate('required|string|email')]

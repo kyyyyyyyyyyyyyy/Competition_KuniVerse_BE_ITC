@@ -1,5 +1,7 @@
 {
     "$schema": "https://json.schemastore.org/package.json",
+    "name": "hai-laravel-starter",
+    "author": "Ghiffa08",
     "private": true,
     "type": "module",
     "scripts": {

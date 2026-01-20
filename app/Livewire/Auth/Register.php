@@ -12,7 +12,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Title('Register')]
-#[Layout('components.layouts.auth')]
+#[Layout('components.layouts.auth.kuniverse')]
 class Register extends Component
 {
     public string $name = '';

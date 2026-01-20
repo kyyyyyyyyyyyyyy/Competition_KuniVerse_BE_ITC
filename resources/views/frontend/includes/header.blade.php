@@ -1,365 +1,217 @@
-<nav
-    class="border-b-2 border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900"
-    role="navigation"
-    aria-label="Main navigation"
->
-    <!-- Skip to main content link for accessibility -->
-    <a
-        href="#main-content"
-        class="sr-only z-50 rounded-md bg-blue-600 px-4 py-2 text-white focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-    >
-        Skip to main content
-    </a>
-
-    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between p-4">
-        <a class="flex items-center space-x-3 rtl:space-x-reverse" href="/" wire:navigate aria-label="Go to homepage">
-            <img class="h-9" src="{{ asset("img/logo-with-text.jpg") }}" alt="{{ app_name() }} Logo" />
+<header class="fixed top-8 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-7xl" x-data="{ mobileOpen: false, userOpen: false, langOpen: false }">
+    <nav class="glass-crystal rounded-full px-6 md:px-8 py-4 flex items-center justify-between relative transition-all duration-300">
+        {{-- LEFT — LOGO --}}
+        <a href="{{ route('home') }}" class="flex items-center gap-2 group" wire:navigate>
+            <span class="font-serif text-xl font-extralight tracking-widest text-prestige-gold uppercase group-hover:text-gray-800 transition-colors duration-300">
+                {{ app_name() }}
+            </span>
         </a>
-        <div class="flex items-center justify-end space-x-1 md:order-2 md:space-x-0 rtl:space-x-reverse">
-            <button
-                class="rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-hidden dark:text-white dark:hover:bg-gray-700 dark:hover:text-white"
-                id="theme-toggle"
-                type="button"
-                aria-label="Toggle between light and dark theme"
-                aria-pressed="false"
-            >
-                <svg
-                    class="hidden h-5 w-5"
-                    id="theme-toggle-dark-icon"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                </svg>
-                <svg
-                    class="hidden h-5 w-5"
-                    id="theme-toggle-light-icon"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                    ></path>
-                </svg>
-            </button>
 
-            <button
-                class="inline-flex cursor-pointer items-center justify-center rounded-sm p-2 text-sm font-medium text-gray-900 hover:bg-gray-100 sm:px-3 sm:py-2 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white"
-                data-dropdown-toggle="language-dropdown-menu"
-                type="button"
-                aria-label="Select language"
-                aria-haspopup="true"
-                aria-expanded="false"
-            >
-                <svg
-                    class="icon icon-tabler icons-tabler-outline icon-tabler-language"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+        {{-- CENTER — DESKTOP MENU --}}
+        <x-frontend.dynamic-menu 
+            location="frontend-header" 
+            itemComponent="components.frontend.kuniverse-menu-item" 
+            cssClass="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-6 lg:gap-8" 
+        />
+
+        {{-- RIGHT — DESKTOP ACTIONS --}}
+        <div class="hidden md:flex items-center gap-3">
+             {{-- Language Switcher --}}
+             <div class="relative">
+                <button 
+                    @click="langOpen = !langOpen" 
+                    @click.away="langOpen = false"
+                    class="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-prestige-gold transition-colors duration-200"
                 >
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M4 5h7" />
-                    <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
-                    <path d="M5 9c0 2.144 2.952 3.908 6.7 4" />
-                    <path d="M12 20l4 -9l4 9" />
-                    <path d="M19.1 18h-6.2" />
-                </svg>
-                <span class="ms-2 hidden sm:block">
-                    {{ strtoupper(app()->currentLocale()) }}
-                </span>
-            </button>
-            <!-- Dropdown:language-dropdown-menu -->
-            <div
-                class="z-50 my-4 hidden list-none divide-y divide-gray-100 rounded-lg bg-white text-base shadow-sm dark:bg-gray-700"
-                id="language-dropdown-menu"
-                role="menu"
-                aria-label="Language selection menu"
-            >
-                <ul class="py-2 font-medium" role="none">
+                    <span class="material-symbols-outlined text-lg">language</span>
+                    <span class="uppercase">{{ app()->currentLocale() }}</span>
+                    <span class="material-symbols-outlined text-base transition-transform duration-200" :class="{'rotate-180': langOpen}">expand_more</span>
+                </button>
+                <div 
+                    x-show="langOpen" 
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 translate-y-2"
+                    x-transition:enter-end="opacity-100 translate-y-0"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100 translate-y-0"
+                    x-transition:leave-end="opacity-0 translate-y-2"
+                    style="display: none;"
+                    class="absolute top-full right-0 mt-3 w-32 glass-crystal rounded-xl py-2 shadow-xl flex flex-col gap-1 text-sm bg-white/80 backdrop-blur-xl border border-white/40"
+                >
                     @foreach (config("app.available_locales") as $locale_code => $locale_name)
-                        <li>
-                            <a
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                                href="{{ route("language.switch", $locale_code) }}"
-                                role="menuitem"
-                            >
-                                <div class="inline-flex items-center">
-                                    {{ $locale_name }}
-                                </div>
-                            </a>
-                        </li>
+                        <a 
+                            href="{{ route('language.switch', $locale_code) }}"
+                            class="px-4 py-2 hover:bg-prestige-gold/10 hover:text-prestige-gold transition-colors text-left"
+                            @click="langOpen = false"
+                        >
+                            {{ $locale_name }}
+                        </a>
                     @endforeach
-                </ul>
+                </div>
             </div>
 
             @guest
-                @if (user_registration())
-                    <a
-                        class="inline-flex cursor-pointer items-center justify-center rounded-sm p-2 text-sm font-medium text-gray-900 hover:bg-gray-100 sm:px-4 sm:py-2 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white"
-                        href="{{ route("register") }}"
-                        wire:navigate
-                    >
-                        <svg
-                            class="icon icon-tabler icons-tabler-outline icon-tabler-user-bolt"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4c.267 0 .529 .026 .781 .076" />
-                            <path d="M19 16l-2 3h4l-2 3" />
-                        </svg>
-                        <span class="ms-2 hidden sm:block">
-                            {{ __("Register") }}
-                        </span>
-                    </a>
-                @endif
+                <a
+                    href="{{ route('login') }}"
+                    wire:navigate
+                    class="flex items-center gap-2 bg-prestige-gold text-white px-5 py-2 rounded-full text-[13px] font-bold uppercase tracking-widest hover:bg-[#a6854e] transition-all hover:scale-105 active:scale-95 shadow-md shadow-prestige-gold/20"
+                >
+                    <span class="material-symbols-outlined text-lg">login</span>
+                    Login
+                </a>
 
                 <a
-                    class="inline-flex cursor-pointer items-center justify-center rounded-sm p-2 text-sm font-medium text-gray-900 hover:bg-gray-100 sm:px-4 sm:py-2 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white"
-                    href="{{ route("login") }}"
+                    href="{{ route('register') }}"
                     wire:navigate
+                    class="flex items-center gap-2 border border-prestige-gold text-prestige-gold px-5 py-2 rounded-full text-[13px] font-bold uppercase tracking-widest hover:bg-prestige-gold hover:text-white transition-all hover:scale-105 active:scale-95"
                 >
-                    <svg
-                        class="icon icon-tabler icons-tabler-outline icon-tabler-login"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M15 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
-                        <path d="M21 12h-13l3 -3" />
-                        <path d="M11 15l-3 -3" />
-                    </svg>
-                    <span class="ms-2 hidden sm:block">
-                        {{ __("Login") }}
-                    </span>
+                    <span class="material-symbols-outlined text-lg">person_add</span>
+                    Register
                 </a>
-            @endguest
+            @else
+                {{-- User Dropdown --}}
+                <div class="relative">
+                    <button 
+                        @click="userOpen = !userOpen" 
+                        @click.away="userOpen = false"
+                        class="flex items-center gap-2 pl-2 pr-1 py-1 rounded-full border border-gray-200 hover:border-prestige-gold transition-all bg-white/50 hover:bg-white"
+                    >
+                        <img
+                            class="h-8 w-8 rounded-full object-cover ring-2 ring-white"
+                            src="{{ asset(Auth::user()->avatar) }}"
+                            alt="{{ Auth::user()->name }}"
+                        />
+                        <span class="text-sm font-medium text-gray-700 pr-2 max-w-[100px] truncate">
+                            {{ Auth::user()->name }}
+                        </span>
+                        <span class="material-symbols-outlined text-gray-400 transition-transform duration-200" :class="{'rotate-180': userOpen}">expand_more</span>
+                    </button>
 
-            @auth
-                <button
-                    class="inline-flex cursor-pointer items-center justify-center rounded-lg px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white"
-                    data-dropdown-toggle="user-dropdown-menu"
-                    type="button"
-                    aria-label="User menu"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                >
-                    <img
-                        class="h-9 rounded-md"
-                        src="{{ asset(Auth::user()->avatar) }}"
-                        alt="{{ Auth::user()->name }}'s profile picture"
-                    />
-                    <span class="ms-2 hidden sm:block">
-                        {{ Auth::user()->last_name }}
-                    </span>
-                </button>
-                <!-- Dropdown:user-dropdown-menu -->
-                <div
-                    class="z-50 my-4 hidden list-none divide-y divide-gray-100 rounded-lg bg-white text-base shadow-sm dark:bg-gray-700"
-                    id="user-dropdown-menu"
-                    role="menu"
-                    aria-label="User account menu"
-                >
-                    <ul class="py-2 font-medium" role="none">
-                        @can("view_backend")
-                            <li class="border-b-2 border-gray-200">
-                                <a
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                                    href="{{ route("backend.dashboard") }}"
-                                    role="menuitem"
-                                    wire:navigate
-                                >
-                                    <div class="inline-flex items-center">
-                                        <svg
-                                            class="icon icon-tabler icons-tabler-outline icon-tabler-layout-dashboard"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                        >
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path
-                                                d="M5 4h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1"
-                                            />
-                                            <path
-                                                d="M5 16h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1"
-                                            />
-                                            <path
-                                                d="M15 12h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1"
-                                            />
-                                            <path
-                                                d="M15 4h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1"
-                                            />
-                                        </svg>
-                                        {{ __("Admin Dashboard") }}
-                                    </div>
+                    <div 
+                        x-show="userOpen" 
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 translate-y-2"
+                        style="display: none;"
+                        class="absolute top-full right-0 mt-3 w-56 glass-crystal rounded-xl py-2 shadow-2xl flex flex-col text-sm bg-white/90 backdrop-blur-xl border border-white/50 z-50"
+                    >
+                        {{-- Header --}}
+                        <div class="px-4 py-3 border-b border-gray-100">
+                            <span class="block text-sm text-gray-900 font-bold">{{ Auth::user()->name }}</span>
+                            <span class="block text-xs text-gray-500 truncate mt-0.5">{{ Auth::user()->email }}</span>
+                        </div>
+
+                        {{-- Menu --}}
+                        <div class="py-1">
+                            @can("view_backend")
+                                <a href="{{ route('backend.dashboard') }}" wire:navigate class="px-4 py-2 hover:bg-prestige-gold/5 hover:text-prestige-gold transition flex items-center gap-3 text-gray-700">
+                                    <span class="material-symbols-outlined text-lg">dashboard</span>
+                                    Dashboard
                                 </a>
-                            </li>
-                        @endif
+                            @endcan
+                            
+                            <a href="{{ route('frontend.users.profile') }}" wire:navigate class="px-4 py-2 hover:bg-prestige-gold/5 hover:text-prestige-gold transition flex items-center gap-3 text-gray-700">
+                                <span class="material-symbols-outlined text-lg">person</span>
+                                Profile
+                            </a>
 
-                        <li>
-                            <a
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                                href="{{ route("frontend.users.profile") }}"
-                                role="menuitem"
-                                wire:navigate
-                            >
-                                <div class="inline-flex items-center">
-                                    <svg
-                                        class="icon icon-tabler icons-tabler-outline icon-tabler-user-bolt me-2"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    >
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-                                        <path d="M6 21v-2a4 4 0 0 1 4 -4h4c.267 0 .529 .026 .781 .076" />
-                                        <path d="M19 16l-2 3h4l-2 3" />
-                                    </svg>
-                                    {{ Auth::user()->name }}
-                                </div>
+                            <a href="{{ route('frontend.users.profileEdit') }}" wire:navigate class="px-4 py-2 hover:bg-prestige-gold/5 hover:text-prestige-gold transition flex items-center gap-3 text-gray-700">
+                                <span class="material-symbols-outlined text-lg">settings</span>
+                                Settings
                             </a>
-                        </li>
-                        <li>
-                            <a
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                                href="{{ route("frontend.users.profileEdit") }}"
-                                role="menuitem"
-                                wire:navigate
-                            >
-                                <div class="inline-flex items-center">
-                                    <svg
-                                        class="icon icon-tabler icons-tabler-outline icon-tabler-settings-cog me-2"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    >
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M12.003 21c-.732 .001 -1.465 -.438 -1.678 -1.317a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c.886 .215 1.325 .957 1.318 1.694"
-                                        />
-                                        <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
-                                        <path d="M19.001 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                                        <path d="M19.001 15.5v1.5" />
-                                        <path d="M19.001 21v1.5" />
-                                        <path d="M22.032 17.25l-1.299 .75" />
-                                        <path d="M17.27 20l-1.3 .75" />
-                                        <path d="M15.97 17.25l1.3 .75" />
-                                        <path d="M20.733 20l1.3 .75" />
-                                    </svg>
-                                    {{ __("Settings") }}
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                                href="{{ route("logout") }}"
-                                role="menuitem"
-                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                            >
-                                <div class="inline-flex items-center">
-                                    <svg
-                                        class="icon icon-tabler icons-tabler-outline icon-tabler-logout me-2"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    >
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"
-                                        />
-                                        <path d="M9 12h12l-3 -3" />
-                                        <path d="M18 15l3 -3" />
-                                    </svg>
-                                    {{ __("Logout") }}
-                                </div>
-                            </a>
-                        </li>
-                        <form id="logout-form" style="display: none" action="{{ route("logout") }}" method="POST">
-                            {{ csrf_field() }}
+                        </div>
+
+                        <div class="border-t border-gray-100 my-1"></div>
+
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 hover:text-red-700 transition flex items-center gap-3">
+                                <span class="material-symbols-outlined text-lg">logout</span>
+                                Logout
+                            </button>
                         </form>
-                    </ul>
+                    </div>
                 </div>
-            @endauth
-
-            <button
-                class="inline-flex h-10 w-10 items-center justify-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 focus:outline-hidden md:hidden dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                data-collapse-toggle="navbar-language"
-                type="button"
-                aria-controls="navbar-language"
-                aria-expanded="false"
-                aria-label="Toggle navigation menu"
-            >
-                <span class="sr-only">Open main menu</span>
-                <svg
-                    class="h-5 w-5"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 17 14"
-                >
-                    <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M1 1h15M1 7h15M1 13h15"
-                    />
-                </svg>
-            </button>
+            @endguest
         </div>
 
-        <div class="hidden w-full items-center justify-between md:order-1 md:flex md:w-auto" id="navbar-language">
-            <x-frontend.dynamic-menu location="frontend-header" />
+        {{-- MOBILE — HAMBURGER --}}
+        <button
+            @click="mobileOpen = !mobileOpen"
+            class="md:hidden text-prestige-gold text-2xl focus:outline-none p-1 rounded-md hover:bg-gray-100/50 transition-colors"
+            aria-label="Toggle menu"
+        >
+            <span class="material-symbols-outlined block transition-transform duration-300" :class="{'rotate-90 opacity-0 absolute': mobileOpen, 'rotate-0 opacity-100': !mobileOpen}">menu</span>
+            <span class="material-symbols-outlined block transition-transform duration-300" :class="{'-rotate-90 opacity-0 absolute': !mobileOpen, 'rotate-0 opacity-100': mobileOpen}">close</span>
+        </button>
+
+        {{-- MOBILE MENU --}}
+        <div
+            x-show="mobileOpen"
+            style="display: none;"
+            @click.away="mobileOpen = false"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 -translate-y-4 scale-95"
+            x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+            x-transition:leave-end="opacity-0 -translate-y-4 scale-95"
+            class="absolute top-full left-0 w-full mt-4 glass-crystal rounded-3xl px-6 py-8 flex flex-col gap-6 text-center md:hidden bg-white/95 backdrop-blur-2xl shadow-2xl border border-white/50"
+        >
+            <x-frontend.dynamic-menu 
+                location="frontend-header" 
+                itemComponent="components.frontend.kuniverse-mobile-menu-item" 
+                cssClass="flex flex-col w-full items-center gap-6" 
+            />
+
+            {{-- MOBILE ACTIONS --}}
+            <div class="flex flex-col gap-3 pt-6 border-t border-gray-100/50">
+                @guest
+                    <a
+                        href="{{ route('login') }}"
+                        wire:navigate
+                        @click="mobileOpen = false"
+                        class="flex items-center justify-center gap-2 bg-prestige-gold text-white px-6 py-3 rounded-full text-[12px] font-bold uppercase tracking-widest hover:bg-[#a6854e] transition-all active:scale-95 shadow-lg shadow-prestige-gold/20"
+                    >
+                        <span class="material-symbols-outlined text-lg">login</span>
+                        Login
+                    </a>
+
+                    <a
+                        href="{{ route('register') }}"
+                        wire:navigate
+                        @click="mobileOpen = false"
+                        class="flex items-center justify-center gap-2 border border-prestige-gold text-prestige-gold px-6 py-3 rounded-full text-[12px] font-bold uppercase tracking-widest hover:bg-prestige-gold hover:text-white transition-all active:scale-95"
+                    >
+                        <span class="material-symbols-outlined text-lg">person_add</span>
+                        Register
+                    </a>
+                @else
+                     <a
+                        href="{{ route('backend.dashboard') }}"
+                        wire:navigate
+                        @click="mobileOpen = false"
+                        class="flex items-center justify-center gap-2 bg-prestige-gold text-white px-6 py-3 rounded-full text-[12px] font-bold uppercase tracking-widest hover:bg-[#a6854e] transition-all active:scale-95 shadow-lg shadow-prestige-gold/20"
+                    >
+                        <span class="material-symbols-outlined text-lg">dashboard</span>
+                        Dashboard
+                    </a>
+                    
+                    <form action="{{ route('logout') }}" method="POST" class="w-full">
+                        @csrf
+                        <button
+                            type="submit"
+                            class="w-full flex items-center justify-center gap-2 border border-red-200 text-red-500 hover:border-red-500 hover:bg-red-500 hover:text-white px-6 py-3 rounded-full text-[12px] font-bold uppercase tracking-widest transition-all active:scale-95"
+                        >
+                            <span class="material-symbols-outlined text-lg">logout</span>
+                            Logout
+                        </button>
+                    </form>
+                @endguest
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+</header>

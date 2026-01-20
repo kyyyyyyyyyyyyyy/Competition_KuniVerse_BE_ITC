@@ -20,16 +20,18 @@ use Illuminate\Support\Facades\Route;
 * --------------------------------------------------------------------
 */
 Route::group(['namespace' => '\Modules\Post\Http\Controllers\Frontend', 'as' => 'frontend.', 'middleware' => 'web', 'prefix' => ''], function () {
-    /*
-     *
-     *  Frontend Posts Routes
-     *
-     * ---------------------------------------------------------------------
-     */
+});
+
+/*
+ *
+ *  Frontend Posts Routes (Livewire)
+ *
+ * ---------------------------------------------------------------------
+ */
+Route::group(['as' => 'frontend.', 'middleware' => 'web'], function () {
     $module_name = 'posts';
-    $controller_name = 'PostsController';
-    Route::get("$module_name", ['as' => "$module_name.index", 'uses' => "$controller_name@index"]);
-    Route::get("$module_name/{id}/{slug?}", ['as' => "$module_name.show", 'uses' => "$controller_name@show"]);
+    Route::get("$module_name", \App\Livewire\Frontend\Artikel\Index::class)->name("$module_name.index");
+    Route::get("$module_name/{slug}", \App\Livewire\Frontend\Artikel\Show::class)->name("$module_name.show");
 });
 
 /*

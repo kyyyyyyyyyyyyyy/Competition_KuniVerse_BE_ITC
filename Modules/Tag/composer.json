@@ -1,11 +1,10 @@
 {
-    "name": "nasirkhan/tag",
+    "name": "ghiffa08/tag",
     "description": "",
     "type": "laravel-module",
     "authors": [
         {
-            "name": "Nasir Khan",
-            "email": "nasir8891@gmail.com"
+            "name": "Ghiffa08"
         }
     ],
     "require": {

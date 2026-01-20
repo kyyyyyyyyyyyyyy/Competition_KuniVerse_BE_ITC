@@ -1,16 +1,15 @@
-<p align="center"><img src="https://user-images.githubusercontent.com/396987/82162573-6940f500-98c7-11ea-974e-888b4f866c74.jpg" alt="Laravel Starter - A CMS like modular starter project built with the latest Laravel framework."></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/396987/82162573-6940f500-98c7-11ea-974e-888b4f866c74.jpg" alt="HaiLaravel - A CMS like modular starter project built with the latest Laravel framework."></p>
 
-# Laravel Starter (based on Laravel 12.x)
-**Laravel Starter** is a Laravel 12.x based simple starter project. Most of the commonly needed features of an application like `Authentication`, `Authorisation`, `Users` and `Role management`, `Application Backend`, `Backup`, `Log viewer` are available here. It is modular, so you may use this project as a base and build your own modules. A module can be used in any `Laravel Starter` based project.
+# HaiLaravel (based on Laravel 12.x)
+**HaiLaravel** is a Laravel 12.x based simple starter project. Most of the commonly needed features of an application like `Authentication`, `Authorisation`, `Users` and `Role management`, `Application Backend`, `Backup`, `Log viewer` are available here. It is modular, so you may use this project as a base and build your own modules. A module can be used in any `HaiLaravel` based project.
 Here Frontend and Backend are completely separated with separate routes, controllers, and themes as well.
 
 ***Please let me know your feedback and comments.***
 
-[![Latest Stable Version](http://poser.pugx.org/nasirkhan/laravel-starter/v)](https://packagist.org/packages/nasirkhan/laravel-starter) [![StyleCI Build](https://github.styleci.io/repos/105638882/shield?style=flat)](https://packagist.org/packages/nasirkhan/laravel-starter) [![License](http://poser.pugx.org/nasirkhan/laravel-starter/license)](https://packagist.org/packages/nasirkhan/laravel-starter) [![PHP Version Require](http://poser.pugx.org/nasirkhan/laravel-starter/require/php)](https://packagist.org/packages/nasirkhan/laravel-starter)
-
+[![Latest Stable Version](http://poser.pugx.org/ghiffa08/hai-laravel-starter/v)](https://packagist.org/packages/ghiffa08/hai-laravel-starter) [![StyleCI Build](https://github.styleci.io/repos/105638882/shield?style=flat)](https://packagist.org/packages/ghiffa08/hai-laravel-starter) [![License](http://poser.pugx.org/ghiffa08/hai-laravel-starter/license)](https://packagist.org/packages/ghiffa08/hai-laravel-starter) [![PHP Version Require](http://poser.pugx.org/ghiffa08/hai-laravel-starter/require/php)](https://packagist.org/packages/ghiffa08/hai-laravel-starter)
 
 # Reporting a Vulnerability
-If you discover any security-related issues, please send an e-mail to Nasir Khan Saikat via nasir8891@gmail.com instead of using the issue tracker.
+If you discover any security-related issues, please send an e-mail to Ghiffa08.
 
 # Appplication Demo
 Check the following demo project. It is just a straight installation of the project without any modification.
