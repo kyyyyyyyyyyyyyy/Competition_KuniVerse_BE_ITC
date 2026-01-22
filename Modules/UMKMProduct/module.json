@@ -1,0 +1,13 @@
+{
+    "name": "UMKMProduct",
+    "alias": "umkmproduct",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\UMKMProduct\\Providers\\UMKMProductServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

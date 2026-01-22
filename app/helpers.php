@@ -4,6 +4,7 @@ use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Sqids\Sqids;
 
 /*
@@ -80,62 +81,87 @@ if (! function_exists('label_case')) {
  * ------------------------------------------------------------------------
  */
 if (! function_exists('show_column_value')) {
-    /**
-     * Generates the formatted column value based on its type.
-     *
-     * @param  object  $valueObject  The model object.
-     * @param  object  $column  The column object with name and type properties.
-     * @param  string  $return_format  The return format ('raw' for unformatted).
-     * @return string|null The formatted column value or null.
-     */
+
     function show_column_value(object $valueObject, object $column, string $return_format = ''): ?string
     {
         $column_name = $column->name;
-        $column_type = $column->type;
+        $column_type = $column->type ?? null;
+        $value       = $valueObject->{$column_name};
 
-        $value = $valueObject->$column_name;
-
-        if (! $value) {
-            return $value;
+        // NULL SAFE
+        if ($value === null) {
+            return '<span class="text-muted">-</span>';
         }
 
+        // RAW VALUE
         if ($return_format === 'raw') {
-            return $value;
+            return (string) $value;
         }
 
-        if (($column_type === 'date') && $value !== '') {
-            $datetime = Carbon::parse($value);
-
-            return $datetime->isoFormat('LL');
+        /* =============================
+         | IMAGE HANDLING (BY COLUMN)
+         ============================= */
+        if (in_array($column_name, ['image', 'image_url', 'img_url', 'thumbnail'])) {
+            return '
+                <a href="'.asset('storage/'.$value).'" data-lightbox="image">
+                    <img
+                        src="'.asset('storage/'.$value).'"
+                        class="img-thumbnail"
+                        style="max-height:250px;"
+                        alt="image"
+                    >
+                </a>
+            ';
         }
-        if (($column_type === 'datetime' || $column_type === 'timestamp') && $value !== '') {
-            $datetime = Carbon::parse($value);
 
-            return $datetime->isoFormat('LLLL');
+        /* =============================
+         | DATE & TIME
+         ============================= */
+        if ($column_type === 'date') {
+            return Carbon::parse($value)->isoFormat('LL');
         }
+
+        if (in_array($column_type, ['datetime', 'timestamp'])) {
+            return Carbon::parse($value)->isoFormat('LLLL');
+        }
+
+        /* =============================
+         | JSON
+         ============================= */
         if ($column_type === 'json') {
-            $return_text = json_encode($value);
-        } elseif ($column_type !== 'json' && is_string($value) && \Illuminate\Support\Str::endsWith(strtolower($value), ['png', 'jpg', 'jpeg', 'gif', 'svg'])) {
-            $img_path = asset($value);
-
-            $return_text = '<figure class="figure">
-                                <a href="'.$img_path.'" data-lightbox="image-set" data-title="Path: '.$value.'">
-                                    <img src="'.$img_path.'" style="max-width:200px;" class="figure-img img-fluid rounded img-thumbnail" alt="">
-                                </a>
-                                <figcaption class="figure-caption">Path: '.$value.'</figcaption>
-                            </figure>';
-        } else {
-            // Handle enum objects by converting to their string value
-            if ($value instanceof \BackedEnum) {
-                $return_text = $value->value;
-            } else {
-                $return_text = $value;
-            }
+            return '<pre class="mb-0">'.json_encode($value, JSON_PRETTY_PRINT).'</pre>';
         }
 
-        return $return_text;
+        /* =============================
+         | ENUM
+         ============================= */
+        if ($value instanceof \BackedEnum) {
+            return e($value->value);
+        }
+
+        /* =============================
+         | STRING LONG TEXT
+         ============================= */
+        if (is_string($value) && Str::length($value) > 200) {
+            return nl2br(e(Str::limit($value, 200)));
+        }
+
+        if (Str::contains($column_name, 'price')) {
+            return 'Rp '.number_format($value, 0, ',', '.');
+        }
+
+        $hiddenColumns = ['password', 'remember_token'];
+        if (in_array($column_name, $hiddenColumns)) {
+            return '<span class="text-muted">Hidden</span>';
+        }
+
+        /* =============================
+         | DEFAULT
+         ============================= */
+        return e((string) $value);
     }
 }
+
 
 /*
  *
